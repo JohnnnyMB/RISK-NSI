@@ -33,3 +33,6 @@ def placement_troupes(id_partie, id_case, nb_troupes = 1):
 	#vérifie si c’est en début de partie → le joueur ne peut poser qu’une troupe
 	#sinon place nb_troupes troupes sur la case voulue
     pass
+
+def enregistre_bdd(D):
+    pass
