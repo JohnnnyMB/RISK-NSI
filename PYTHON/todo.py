@@ -33,3 +33,14 @@ def placement_troupes(id_partie, id_case, nb_troupes = 1):
     #vérifie si c’est en début de partie → le joueur ne peut poser qu’une troupe
     #sinon place nb_troupes troupes sur la case voulue
     pass
+
+def enregistre_bdd(D): 
+    # D est un dictionnaire dont les clés sont les champs de la bdd et leurs valeurs sont les valeurs que prennent ces champs dans la bdd
+    # clés de D : nomdelatable_nomduchamps
+    # enregistre tous les éléments dans la bdd en sql
+    pass
+
+def recupere_bdd():
+    # renvoie un dictionnaire dont les clés sont les champs de la bdd et leurs valeurs sont les valeurs que prennent ces champs dans la bdd
+    pass
+
