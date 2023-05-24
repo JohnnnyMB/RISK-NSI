@@ -31,17 +31,40 @@ class Database:
         query = "UPDATE etat_partie SET nb_pions VALUES ? WHERE id_partie = ? AND id_case = ? ;"
         self.cursor.execute(query, (nb_troupe, idpartie, idcase))
 
-    def getPartie(self, idpartie):  # renvoie toutes les infos concernant les cases de la partie
-        query = "SELECT (*) FROM etat_partie WHERE id_partie = ? ;"
-        self.cursor.execute(query, (idpartie,))
-        return self.cursor.fetchall()  # Renvoie liste de tuples [(id_partie, id_case, id_joueur, nb_pions)], avec un tuple par case
+     def recupere_bdd(self,table,nom_champ,D):  # renvoie les valeurs sous forme de tuple de la bdd en fonction de la table et nom de champ en paramètre
+        if D != dict():
+            for nb_element in range
+            query = "SELECT ? FROM ? WHERE ? = ?;"
+            self.cursor.execute(query,(nom_champ,table,where_champ,where_condition))
+            valeur = self.cursor.fetchall()
+            return valeur
+        else:
+            query = "SELECT ? FROM ? ;"
+            self.cursor.execute(query(nom_champ,table))
+            valeur = self.cursor.fetchall()
+            return valeur
+            
+    def enregistrer_bdd(self, D):  # d => dict, faudra ptet modifier après, y'a ptet des erreurs dans la récupération des données
+        for table in D:
+            self.cursor.execute("SELECT id FROM ? ;", (table,))
+            nb_ids = list(self.cursor)
+            self.connection.commit()
 
-    def getCase(self, idpartie, coord):  # coord est un tuple (x,y)
-        query = "SELECT nb_pions, id_joueurs, id_case FROM etat_partie JOIN case ON etat_partie.id_case = case.id_case WHERE id_partie = ? AND x = ? AND y = ?"
-        self.cursor.execute(query, (idpartie, coord[0], coord[1]))
-        case = self.cursor.fetchall()  # Unr liste contenant un seul tuple
-        case = case[0]  # Afin de récupérer le seul tuple de la liste
-        return case  # Renvoie le tuple du nb de pions et l'id du joueur et celui de la case
+            while len(nb_ids[0]) < len(table['id']):
+
+                self.cursor.execute("INSERT INTO ? ? VALUES ? ;", (table, table.keys(), (table[column][len(nb_ids[0])] for column in table),))
+                self.connection.commit()
+
+
+                self.cursor.execute("SELECT id FROM ? ;", (table,))
+                nb_ids = list(self.cursor)
+                self.connection.commit()
+
+            for column in table:
+                for id_entry in range(0, len(column.values())):
+
+                    self.cursor.execute("UPDATE ? SET ? = ? WHERE id = ?;", (table, column, column[id_entry]), id_entry, )
+                    self.connection.commit()
     
     def updateProperty(self, idpartie, idcase, id_new_owner):  # Lorsqu'un joueur prend un pays
         query = "UPDATE id_joueur FROM etat_partie VALUES ? WHERE id_case = ? AND id_partie = ?;"
