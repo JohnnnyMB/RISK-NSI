@@ -15,6 +15,15 @@ class Database:
             database=database_ids.database
         )
         self.cursor = self.connection.cursor()
+        self.elements_bdd = {"aretes": ["id_case1" , "id_case2"],
+                            "cases" : ["id_case", "id_plateau", "id_continent", "nom_pays", "x", "y", "svg", "nb_pions"],
+                            "continents" : ["id_plateau", "id_continent", "nom_continent", "nb_pions"],
+                            "etat_partie" : ["id_partie", "id_case", "id_joueur", "nb_pions"],
+                            "joueurs" : ["id_joueur", "pseudo", "mdp"],
+                            "joueurs_parties" : ["id_partie", "id_joueur", "id_joueursuivant"],
+                            "parties" : ["id_partie", "id_plateau", "etat", "tour"],
+                            "plateaux" : ["id_plateau", "nom_plateau", "image"],
+                            "tokens" : ["id_joueur", "token", "time"]}
 
     def find_token(self, token: str):
         query = "SELECT id_joueur, token, time FROM tokens WHERE token = ?;"
@@ -45,12 +54,24 @@ class Database:
         case = case[0]  # Afin de récupérer le seul tuple de la liste
         return case  # Renvoie le tuple du nb de pions et l'id du joueur
 
-    def recupere_bdd(self, table, nom_champ, conditions_dict=None):
+     def recupere_bdd(self, table, nom_champ, conditions_dict=None):
         # conditions_dict se présente comme un dictionnaire dont les clés et les valeurs sont des tuples
         # dont la première valeur est le séparateur et la deuxième la valeur de la condition à respecter
         # exemple : conditions_dict = {"id_joueur":("=",1),"pseudo":("LIKE","%a%")}
 
         # renvoie les valeurs sous forme de tuple de la bdd en fonction de la table et nom de champ en paramètre
+        trouve_table = False
+        trouve_champ = False
+        trouve_condition = False
+        for k,v in self.elements_bdd:
+            if trouve_table == False and k == table:
+                trouve_table = True
+            if trouve_champ == False and nom_champ in v:
+                trouve_champ = True
+            for cond in conditions_dict.values():
+                if trouve_condition == False and cond in v:
+                    trouve_condition = True
+        assert trouve_table and trouve_champ and trouve_condition, "un des arguments rentrés n'est pas dans la base de données"
 
         if conditions_dict == None:
             query = "SELECT {} FROM {};".format(nom_champ, table)
@@ -60,7 +81,7 @@ class Database:
         if not isinstance(conditions_dict, dict):
             raise TypeError("conditions_dict doit être un dictionnaire")
 
-        query = "SELECT {} FROM {} WHERE {} %s {}"
+        query = "SELECT {} FROM {} WHERE"
         conditions = [nom_champ, table]
 
         for key, value in conditions_dict.items():
@@ -80,7 +101,10 @@ class Database:
                 conditions.append(key)
                 conditions.append(value[1])
             else:
-                query += " AND {} %s {} " % value[0]
+                if len(conditions) == 2:
+                    query += " {} %s {} " % value[0]
+                else:
+                    query += " AND {} %s {} " % value[0]
                 conditions.append(key)
                 conditions.append(value[1])
 
