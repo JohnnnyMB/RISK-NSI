@@ -1,8 +1,10 @@
 
 import random
 from web_socket_server/database/database.py import Database
+db = Database()
 
 def attaquer(database, graphe, idpartie, id_joueur, id_case_dep, id_case_cib, nb_troupe):  # Possible que si le nb de troupe est strictement supérieur à 1
+
     nb_pions_case_dep, id_joueur = database.getCase(idpartie, id_case_dep)
     nb_pions_case_cib, id_joueur_ennemie = database.getCase(idpartie, id_case_cib)
     # On s'assure que le nb de troupes n'est pas abusé, que l'on attaque un autre joueur et que le chemin entre les 2 cases existent
@@ -41,8 +43,7 @@ def bataille_des(pions_att, pions_def):  # Renvoie le tuple des pertes de chaque
     return (perte_déf, perte_att)
 
 def deplacer_troupes(id_partie, case_depart, case_arrivée, nb_troupes):
-	
-    db = Database()
+    global db
     G = creer_graphe(id_partie) 
     Partie = db.getPartie(id_partie) # liste de tuples [(id_case, id_joueur, nb_pions)], avec un tuple par case
 
@@ -98,6 +99,7 @@ def tour(D,id_partie): # D => bdd
 
 
 def donner_troupes(D,id_partie, joueur): # D => base de donnée sous forme de dictionnaire
+	global db
 	nb_territoires = 0
 	for partie in D["etat_partie"]:
 	    if partie["id_partie"] == id_partie and joueur == partie["id_joueur"]:
