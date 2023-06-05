@@ -4,7 +4,7 @@ from web_socket_server/database/database.py import Database
 
 class NbPionsInsuffisant(Exception):
     "lorsque le nombre de pions qu'on depalce ou avec lequel on attaque est trop grand"
-    pass
+    passjehjrr
 class CasesNonConnectes(Exception):
     "lorsque on ne peut pas passer d'une case a l'autre sans passer sur le terriotire d'autrui ou alors ces cases ne sont pas voisines"
     pass
